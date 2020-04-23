@@ -1,0 +1,151 @@
+"XML NODE"
+
+Object subclass: #XMLNode
+	instanceVariableNames: 'name children'
+	classVariableNames: ''
+	package: 'KostiaXML'
+
+addChild: aChild
+	children add: aChild.
+
+getChildren 
+	^children.
+
+getName
+	^name.
+
+setName: aName
+	name := aName.
+
+init: aName
+	name := aName.
+	children := OrderedCollection new.
+
+
+
+"XML Attribute"
+XMLNode subclass: #XMLAttribute
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	package: 'KostiaXML'
+
+getValue
+	^value.
+
+setValue: aValue
+	value := aValue.
+
+initA: aValue withName: aName
+	self init: aName.
+	value := aValue.
+
+printString
+	Transcript 
+		show: 'Attribute - '; 
+		show: name;
+		show: ' | ';
+		show: value;
+		cr.
+		
+	children do: [
+		:object | 
+		Transcript show: '  '.
+		object printString.
+	]
+
+
+
+"XML Document"
+XMLNode subclass: #XMLDocument
+	instanceVariableNames: ''
+	classVariableNames: ''
+	package: 'KostiaXML'
+
+printString
+	Transcript 
+		show: 'Document - '; 
+		show: name;
+		cr.
+	
+	children do: [
+		:object | 
+		Transcript show: '  '.
+		object printString.
+	].
+
+
+
+
+"XML Elelment"
+XMLNode subclass: #XMLElement
+	instanceVariableNames: 'value attributes'
+	classVariableNames: ''
+	package: 'KostiaXML'
+
+addAttribute: anAttribute
+	attributes add: anAttribute.
+
+getValue
+	^value.
+
+setValue: aValue
+	value := aValue.
+
+initE: aValue withName: aName
+	self init: aName.
+	attributes := OrderedCollection new.
+	value := aValue.
+
+printString
+	Transcript 
+		show: 'Element - '; 
+		show: name;
+		show: ' | ';
+		show: value;
+		cr.
+		
+	attributes do: [
+		:object | 
+		Transcript show: '    '.
+		object printString.
+	].
+
+	children do: [
+		:object | 
+		Transcript show: '  '.
+		object printString.
+	].
+
+
+
+"TESING CODE"
+studentList := XMLDocument new.
+studentList init: 'StudentList'.
+
+"First Student"
+studentOne := XMLElement new.
+studentOne initE: '2991234' withName: 'Student ID'.
+nameOne := XMLAttribute new.
+nameOne initA: 'Joshua Boyden' withName: 'Name'.
+classOne := XMLAttribute new.
+classOne initA: 'Senior' withName: 'Class'.
+studentOne addAttribute: nameOne.
+studentOne addAttribute: classOne.
+
+"Second Student"
+studentTwo := XMLElement new.
+studentTwo initE: '7654098' withName: 'Student ID'.
+nameTwo := XMLAttribute new.
+nameTwo initA: 'Kayla Lewis' withName: 'Name'.
+classTwo := XMLAttribute new.
+classTwo initA: 'Senior' withName: 'Class'.
+studentTwo addAttribute: nameTwo.
+studentTwo addAttribute: classTwo.
+
+studentList addChild: studentOne.
+studentList addChild: studentTwo.
+
+studentList printString.
+
+
+
